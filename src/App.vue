@@ -1,6 +1,16 @@
 <template>
   <div id="app">
-    <x-input v-model="xValue" placeholder="请输入"></x-input>
+    <x-form :model="myForm">
+      <x-form-item>
+        <x-input v-model="myForm.xValue" placeholder="请输入"></x-input>
+      </x-form-item>
+      <x-form-item>
+        <div class="radio-group">
+          <x-radio v-model="myForm.xrValue" label="male">男</x-radio>
+          <x-radio v-model="myForm.xrValue" label="female">女</x-radio>
+        </div>
+      </x-form-item>
+    </x-form>
     <!-- <el-form
       :model="ruleForm"
       status-icon
@@ -27,12 +37,18 @@
 </template>
 
 <script>
+import XForm from './components/x-form';
+import XFormItem from './components/x-form-item';
 import XInput from './components/x-input';
+import XRadio from './components/x-radio';
 
 export default {
   name: 'app',
   components: {
+    XForm,
+    XFormItem,
     XInput,
+    XRadio,
   },
   data() {
     var checkAge = (rule, value, callback) => {
@@ -76,8 +92,10 @@ export default {
         checkPass: '',
         age: '',
       },
-      xValue: '',
-      xrValue: '',
+      myForm: {
+        xValue: '',
+        xrValue: 'male',
+      },
       rules: {
         pass: [{ validator: validatePass, trigger: 'blur' }],
         checkPass: [{ validator: validatePass2, trigger: 'blur' }],

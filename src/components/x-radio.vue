@@ -1,8 +1,9 @@
 <template>
   <div>
-    <input type="radio" :value="v" @change="change" v-bind="$attrs" />
-    <span><slot /></span>
-    {{ v }}
+    <label>
+      <input type="radio" :value="label" v-model="model" v-bind="$attrs" />
+      <slot /> - {{label}} - {{value}}
+    </label>
   </div>
 </template>
 
@@ -10,20 +11,23 @@
 export default {
   name: 'XRadio',
   inheritAttrs: false,
-  // 自定义v-model vue 2.2.0+ 新增
-  // text 和 textarea 元素使用 value 作为 prop 和 input 作为事件；
-  // checkbox 和 radio 元素使用 checked 作为 prop 和 change 作为事件；
-  // select 元素使用 value 作为 prop 并将 change 作为事件。
-  model: {
-    prop: 'v', // defalt: value
-    event: 'i', // default: input
-  },
   props: {
-    v: String,
+    label: {
+      type: String,
+      default: '',
+    },
+    value: String,  // 父组件 v-model 传过来的值
   },
-  methods: {
-    change(e) {
-      this.$emit('i', e.target.value);
+  computed: {
+    model: {
+      set(v) {
+        // console.log('[set model]', v);
+        this.$emit('input', v); // 将值更新到父组件的 v-model 上
+      },
+      get() {
+        // console.log('[get model]');
+        return this.value;
+      },
     },
   },
 };
